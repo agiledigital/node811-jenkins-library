@@ -56,6 +56,10 @@ def call(Map config) {
         if(fileExists("${config.baseDir}/build")) {
           sh "mv ${config.baseDir}/build ${artifactDir}"
         }
+        
+        if(fileExists("${config.baseDir}/serverless.yml")) {
+          sh "mv ${config.baseDir}/serverless.yml ${artifactDir}"
+        }
 
         // The static folder and application specific config files 
         // should also be staged if they exist.
