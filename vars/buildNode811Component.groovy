@@ -45,7 +45,17 @@ def call(Map config) {
         sh "mkdir -p ${artifactDir}"
 
         yarn "install --production --ignore-scripts --prefer-offline"
-        sh "mv ${config.baseDir}/node_modules ${config.baseDir}/dist ${config.baseDir}/package.json ${artifactDir}"
+        sh "mv ${config.baseDir}/node_modules ${config.baseDir}/package.json ${artifactDir}"
+
+        // The build and dist folders may exisit depending on builder.
+        // Copy them into the artifact if they exist. e.g. React uses build, NodeJS defualt is dist.
+        if(fileExists("${config.baseDir}/dist")) {
+          sh "mv ${config.baseDir}/dist ${artifactDir}"
+        }
+        
+        if(fileExists("${config.baseDir}/build")) {
+          sh "mv ${config.baseDir}/build ${artifactDir}"
+        }
 
         // The static folder and application specific config files 
         // should also be staged if they exist.
